@@ -57,6 +57,13 @@ router.post("/", async (request, response) => {
       performance_date: request.body.performance_date,
       price: request.body.price,
     }
+
+    const values = Object.values(newConcert)
+
+    if (values.filter((value) => typeof value !== "undefined").length !== values.length) {
+      return response.status(400).json({ error: "Missing fields" })
+    }
+
     const [newConcertId] = await knex("concerts").insert(newConcert)
     response.status(201).json({ id: newConcertId, ...newConcert })
   } catch (error) {
@@ -81,8 +88,13 @@ router.put("/:id", async (request, response) => {
       performance_date: request.body.performance_date,
       price: request.body.price,
     }
+
+    if (Object.values(updateConcert).filter((value) => typeof value !== "undefined").length === 0) {
+      return response.status(400).json({ error: "No fields to update" })
+    }
+
     await knex("concerts").where({ id }).update(updateConcert)
-    response.json({ id, ...updateConcert })
+    response.status(201).json({ id, ...updateConcert })
   } catch (error) {
     console.error(error)
     response.status(500).json({ error: "Unexpected error" })
@@ -99,7 +111,7 @@ router.delete("/:id", async (request, response) => {
     }
 
     await knex("concerts").where({ id }).del()
-    response.json({ id, message: "Deleted concert" })
+    response.status(204).end()
   } catch (error) {
     console.error(error)
     response.status(500).json({ error: "Unexpected error" })
