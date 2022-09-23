@@ -15,7 +15,7 @@ router.get("/", async (request, response) => {
     }
 
     if ("createdAfter" in request.query && typeof request.query.createdAfter === "string") {
-      query = query.where("createdAfter", ">", request.query.createdAfter)
+      query = query.where("created_date", ">", new Date(request.query.createdAfter).toISOString())
     }
 
     if ("band" in request.query && typeof request.query.band === "string") {
