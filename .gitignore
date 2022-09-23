@@ -1,2 +1,11 @@
-/node_modules
+.DS_Store
+
+node_modules
+package-lock.json
+
 .env
+
+# Testing outputs
+test-report.html
+output.json
+results.json
