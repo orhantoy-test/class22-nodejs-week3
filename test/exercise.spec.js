@@ -6,21 +6,18 @@ const testConcerts = require('./test_concerts');
 
 const performanceDate = new Date().toISOString().replace('T', ' ').split('.')[0].replace('Z', '');
 
-beforeAll(async done => {
+beforeAll(async () => {
     process.env.NODE_ENV = "test";
     await knex.migrate.latest();
     await knex('concerts').truncate()
-    done()
 });
 
-beforeEach(async done => {
+beforeEach(async () => {
     await knex.seed.run()
-    done()
 });
-  
-afterEach(async done => {
+
+afterEach(async () => {
     await knex('concerts').truncate()
-    done()
 });
 
 describe(".env file", () => {
@@ -157,7 +154,7 @@ describe("PUT /api/concerts/<id>", () => {
                     .send({ venue: newVenue });
             });
 
-        expect(response.statusCode).toBe(201);     
+        expect(response.statusCode).toBe(201);
         expect(response.body.venue).toBe(newVenue);
     });
 });
